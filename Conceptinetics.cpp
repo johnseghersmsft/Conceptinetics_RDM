@@ -286,6 +286,11 @@ uint8_t &DMX_FrameBuffer::operator[] ( uint16_t index )
     return m_buffer[index];
 }
 
+uint8_t* DMX_FrameBuffer::getBufferZeroAligned()
+{
+    return m_buffer + 1;
+}
+
 
 DMX_Master::DMX_Master ( DMX_FrameBuffer &buffer, int readEnablePin )
 : m_frameBuffer ( buffer ), 
@@ -402,7 +407,8 @@ DMX_Slave::DMX_Slave ( DMX_FrameBuffer &buffer, int readEnablePin )
 {
     __dmx_slave = this;
     __re_pin    = readEnablePin;
-    pinMode ( __re_pin, OUTPUT );
+    if (__re_pin > -1)
+        pinMode ( __re_pin, OUTPUT );
 
     ::SetISRMode ( isr::Disabled );
 }
@@ -413,7 +419,8 @@ DMX_Slave::DMX_Slave ( uint16_t nrChannels, int readEnablePin )
 {
     __dmx_slave = this;
     __re_pin    = readEnablePin;
-    pinMode ( __re_pin, OUTPUT );
+    if (__re_pin > -1)
+        pinMode ( __re_pin, OUTPUT );
 
     ::SetISRMode ( isr::Disabled );
 }
@@ -1024,11 +1031,13 @@ void SetISRMode ( isr::isrMode mode )
     switch ( mode )
     {
         case isr::Disabled:
-            #if defined(UCSRB)
-                UCSRB  = 0x0;
-            #elif defined(UCSR0B)
-        	    UCSR0B = 0x0;
-            #endif    
+            // Updating per https://sourceforge.net/p/dmxlibraryforar/tickets/11/
+            // #if defined(UCSRB)
+            //     UCSRB  = 0x0;
+            // #elif defined(UCSR0B)
+        	//     UCSR0B = 0x0;
+            // #endif    
+            DMX_UCSRB = 0x0;
             readEnable = LOW;
             break;
 

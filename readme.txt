@@ -1,3 +1,5 @@
+This library is an update of the "Conceptinetics_RDM_alpha3_2.zip" snapshot provided at https://sourceforge.net/projects/dmxlibraryforar/files/.
+The GIT repo on Sourceforge is not up to date with this snapshot.
 
 This library has been developed to support the CTC-DRA-13-R2 Isolated DMX-RDM Shield and CTC-DRA-10-1, CTC-DRA-10-R2 Shield on the Arduino platform. 
 However, the use of this library is not limited to the prior mentioned boards. This library works on the principle of using a RS485 driver to drive a DMX line or act as a receiver ( DMX Slave )
@@ -28,6 +30,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 CHANGE LOG:
 
+	- 30-Sep-2019: (johnseghersmsft) Incorporated fix described at https://sourceforge.net/p/dmxlibraryforar/tickets/11/
+	               added tests to only set __re_pin as output if not the default -1
+				   added method to get pointer to underlying byte buffer
 	- 28-Feb-2017: Fixed various RDM timing issues
 	- 28-Feb-2017: Removed unwanted transmission during line turnaround (RDM)
 	- 28-Feb-2017: Updated break time to 176us to comply specs
